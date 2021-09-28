@@ -36,8 +36,7 @@ nms.on('preConnect', (id, args) => {
 });
 
 nms.on('prePublish', async (id, StreamPath, args) => {
-  let session = nms.getSession(id);
-  let body = {
+  const body = {
     "ingest_id": id,
     "timestamp": Date.now(),
     "region": process.env.region,
@@ -51,6 +50,7 @@ nms.on('prePublish', async (id, StreamPath, args) => {
 
     // Do whatever the fuck you want.
   } catch (e) {
+    const session = nms.getSession(id);
     session.reject();
   }
 });
