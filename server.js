@@ -10,15 +10,15 @@ const config = {
     ping_timeout: 60
   },
   relay: {
-  ffmpeg: '/usr/local/bin/ffmpeg',
-  tasks: [
-    {
-      app: 'live',
-      mode: 'push',
-      edge: 'rtmp://10.1.0.148:8000/edge',
-    }
-  ]
-},
+    ffmpeg: '/usr/local/bin/ffmpeg',
+    tasks: [
+      {
+        app: 'live',
+        mode: 'push',
+        edge: 'rtmp://10.1.0.148:8000/edge',
+      }
+    ]
+  },
   http: {
     port: 8000,
     allow_origin: '*'
@@ -34,18 +34,21 @@ nms.on('preConnect', (id, args) => {
   // session.reject();
 });
 
-nms.on('prePublish', (id, StreamPath, args) => {
-let body = {
+nms.on('prePublish', async (id, StreamPath, args) => {
+  let session = nms.getSession(id);
+  let body = {
     "ingest_id": id,
     "timestamp": Date.now(),
     "region": process.env.region,
     "server_ip": process.env.server_ip,
-    "channel": StreamPath.replace('/live/',''),
+    "channel": StreamPath.replace('/live/', ''),
     "submitted_key": args.auth
-}
-console.log(body)
- // let session = nms.getSession(id);
- // session.reject();
+  }
+
+  const ingestAuthResponse = (await axios.post('http://api-tunnel.brime.tv/v1/streams/ingest-auth', body)).data;
+
+  // Do whatever the fuck you want.
+
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
