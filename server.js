@@ -1,5 +1,6 @@
 const NodeMediaServer = require('node-media-server');
-require('dotenv').config()
+require('dotenv').config();
+const axios = require('axios');
 
 const config = {
   rtmp: {
@@ -45,10 +46,13 @@ nms.on('prePublish', async (id, StreamPath, args) => {
     "submitted_key": args.auth
   }
 
-  const ingestAuthResponse = (await axios.post('http://api-tunnel.brime.tv/v1/streams/ingest-auth', body)).data;
+  try {
+    const ingestAuthResponse = (await axios.post('http://api-tunnel.brime.tv/v1/streams/ingest-auth', body)).data;
 
-  // Do whatever the fuck you want.
-
+    // Do whatever the fuck you want.
+  } catch (e) {
+    session.reject();
+  }
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
