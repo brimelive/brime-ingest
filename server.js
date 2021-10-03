@@ -78,6 +78,7 @@ nms.on('prePublish', async (id, StreamPath, args) => {
     "channel": StreamPath.replace('/live/', ''),
     "submitted_key": args.auth
   }
+  axios.post('http://127.0.0.1:3000/v1/streams/webhook/on_publish', body)
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
@@ -86,4 +87,10 @@ nms.on('postPublish', (id, StreamPath, args) => {
 
 nms.on('donePublish', (id, StreamPath, args) => {
   console.log('[IngestEvent on donePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  const body = {
+    "ingest_id": id,
+    "timestamp": Date.now(),
+    "channel": StreamPath.replace('/live/', ''),
+  }
+  axios.post('http://127.0.0.1:3000/v1/streams/webhook/on_publish_done', body)
 });
