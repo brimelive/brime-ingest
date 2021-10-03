@@ -78,7 +78,7 @@ nms.on('prePublish', async (id, StreamPath, args) => {
     "channel": StreamPath.replace('/live/', ''),
     "submitted_key": args.auth
   }
-  axios.post('http://127.0.0.1:3000/v1/streams/webhook/on_publish', body)
+  axios.post('https://api.brime.tv/v1/streams/webhook/on_publish', body)
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
@@ -92,5 +92,5 @@ nms.on('donePublish', (id, StreamPath, args) => {
     "timestamp": Date.now(),
     "channel": StreamPath.replace('/live/', ''),
   }
-  axios.post('http://127.0.0.1:3000/v1/streams/webhook/on_publish_done', body)
+  axios.post('https://api.brime.tv/v1/streams/webhook/on_publish_done', body)
 });
