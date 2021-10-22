@@ -9,7 +9,7 @@ async function checkSessionShit({id, args, streamPath}){
     auth: args.auth,
     id
   }
-  console.log(data)
+  console.log(args)
   const sleep = ()=>new Promise(async (res, rej)=>{
     axios.post('https://api.brime.tv/v1/account/stream_auth', data).then(function (response) {
       if(response.status === 200){
@@ -45,7 +45,7 @@ const config = {
     auth_callback: checkSessionShit
   },
   relay: {
-    ffmpeg: '/usr/local/bin/ffmpeg',
+    ffmpeg: '/usr/bin/ffmpeg',
     tasks: [
       {
         app: 'live',
@@ -64,7 +64,7 @@ var nms = new NodeMediaServer(config)
 
 nms.run();
 nms.on('preConnect', (id, args) => {
-  // console.log('[IngestEvent on preConnect]', `id=${id} args=${JSON.stringify(args)}`);
+  console.log('[IngestEvent on preConnect]', `id=${id} args=${JSON.stringify(args)}`);
   // let session = nms.getSession(id);
   // session.reject();
 });
